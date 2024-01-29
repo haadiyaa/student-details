@@ -22,7 +22,6 @@ class BoxInputField extends StatelessWidget {
   InputBorder buildenabled = const OutlineInputBorder(
     borderSide: BorderSide(
       width: 1.5,
-      // color: Color.fromARGB(255, 167, 116, 255),
     ),
   );
 

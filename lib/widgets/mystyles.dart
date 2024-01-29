@@ -14,7 +14,7 @@ TextStyle bodyTextStyle = const TextStyle(
   fontWeight: FontWeight.w500,
 );
 TextStyle buttonTextStyle = const TextStyle(
-  fontSize: 20,
+  fontSize: 16,
   fontWeight: FontWeight.bold,
 );
 
