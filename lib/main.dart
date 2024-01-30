@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:student_login_project/screens/homepage.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:student_login_project/view/screens/homepage.dart';
+import 'package:student_login_project/controller/student_db.dart';
 
-void main(){
+Future<void> main()async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await database;
   runApp(const MyApp());
 }
 class MyApp extends StatelessWidget {

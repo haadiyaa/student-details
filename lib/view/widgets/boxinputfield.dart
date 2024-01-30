@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:student_login_project/view/widgets/mystyles.dart';
 
 class BoxInputField extends StatelessWidget {
   final TextEditingController controller;
   final Widget placeholder;
-  final String Function(String?)? validator;
+  final String? Function(String?)? validator;
+  final int? line;
 
   InputBorder buildFocusBorder = const OutlineInputBorder(
     borderRadius: BorderRadius.all(
@@ -22,6 +24,7 @@ class BoxInputField extends StatelessWidget {
   InputBorder buildenabled = const OutlineInputBorder(
     borderSide: BorderSide(
       width: 1.5,
+      color: Colors.blue,
     ),
   );
 
@@ -29,11 +32,13 @@ class BoxInputField extends StatelessWidget {
       {super.key,
       required this.controller,
       required this.placeholder,
-      this.validator});
+      this.validator, this.line});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textAlignVertical: TextAlignVertical.top,
+      maxLines: line,
       validator: validator,
       controller: controller,
       decoration: InputDecoration(
@@ -42,9 +47,8 @@ class BoxInputField extends StatelessWidget {
           overflow: TextOverflow.clip,
         ),
         label: placeholder,
-        hintStyle: const TextStyle(
-          color: Color.fromARGB(255, 190, 190, 190),
-        ),
+        labelStyle: bodyTextStyle,
+        alignLabelWithHint: true,
         focusedBorder: buildFocusBorder,
         border: buildBorder,
         enabledBorder: buildenabled,
