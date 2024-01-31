@@ -28,7 +28,7 @@ class BoxButton extends StatelessWidget {
               color: Colors.grey,
               offset: Offset(2, 2),
               blurRadius: 2,
-            )
+            ),
           ],
           color: color,
           borderRadius: BorderRadius.circular(10),

@@ -6,6 +6,8 @@ class BoxInputField extends StatelessWidget {
   final Widget placeholder;
   final String? Function(String?)? validator;
   final int? line;
+  final bool readOnly;
+  bool read=true;
 
   InputBorder buildFocusBorder = const OutlineInputBorder(
     borderRadius: BorderRadius.all(
@@ -28,15 +30,19 @@ class BoxInputField extends StatelessWidget {
     ),
   );
 
-  BoxInputField(
-      {super.key,
-      required this.controller,
-      required this.placeholder,
-      this.validator, this.line});
+  BoxInputField({
+    super.key,
+    required this.controller,
+    required this.placeholder,
+    this.validator,
+    this.line,
+    required this.readOnly,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: readOnly,
       textAlignVertical: TextAlignVertical.top,
       maxLines: line,
       validator: validator,

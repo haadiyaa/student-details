@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:student_login_project/Model/model.dart';
 import 'package:student_login_project/controller/student_db.dart';
-import 'package:student_login_project/view/widgets/mystyles.dart';
 import 'package:student_login_project/view/widgets/studenttile.dart';
 
 class StudentList extends StatelessWidget {

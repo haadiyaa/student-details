@@ -63,7 +63,7 @@ Future<void> deleteStudent(int? id) async {
 
 Future<void> updateStudent(Student toUpdate) async{
   final db=await database;
-  db.update('StudentTable',toUpdate.toMap(),where: 'id=?',whereArgs: [toUpdate.id],conflictAlgorithm: ConflictAlgorithm.replace);
+   await db.update('StudentTable',toUpdate.toMap(),where: 'id=?',whereArgs: [toUpdate.id],conflictAlgorithm: ConflictAlgorithm.replace);
   print('updated');
   getAllStudents();
   studentListNotifier.notifyListeners();

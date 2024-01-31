@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:student_login_project/Model/model.dart';
-import 'package:student_login_project/view/screens/detailspage.dart';
+import 'package:student_login_project/view/screens/updatestudent.dart';
 import 'package:student_login_project/view/widgets/mystyles.dart';
 
 class StudentTile extends StatelessWidget {
@@ -14,10 +14,12 @@ class StudentTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      
       onTap: () {
+        print('ljhgfdsa');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => DetailsPage(rollNo: data.rollNo, name: data.name, age: data.age, address: data.address,id: data.id,)),
+          MaterialPageRoute(builder: (_) => UpdateStudent(id: data.id, rollNo: data.rollNo, name: data.name, age: data.age, address: data.address)),
         );
       },
       child: Padding(
@@ -50,7 +52,7 @@ class StudentTile extends StatelessWidget {
               ],
             ),
             const CircleAvatar(
-              backgroundColor: Colors.amber,
+              child: Icon(Icons.person,size: 30,),
               radius: 30,
             ),
           ],

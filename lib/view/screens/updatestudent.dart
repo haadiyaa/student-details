@@ -5,9 +5,7 @@ import 'package:student_login_project/view/widgets/boxbuttorn.dart';
 import 'package:student_login_project/view/widgets/boxinputfield.dart';
 import 'package:student_login_project/view/widgets/mystyles.dart';
 
-class UpdateStudent extends StatelessWidget {
-  final _key = GlobalKey<FormState>();
-
+class UpdateStudent extends StatefulWidget {
   int? id;
   final String rollNo;
   final String name;
@@ -24,38 +22,68 @@ class UpdateStudent extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final controllerName = TextEditingController(text: name);
-    final controllerAddress = TextEditingController(text: address);
-    final controllerRollNo = TextEditingController(text: rollNo);
-    final controllerAge = TextEditingController(text: age);
+  State<UpdateStudent> createState() => _UpdateStudentState();
+}
 
-  Future<void> onUpdateStudentClick() async {
-    final _name=controllerName.text;
-    final _rollNo=controllerRollNo.text;
-    final _age=controllerAge.text;
-    final _address=controllerAddress.text;
-    final _student=Student(address: _address,name: _name,age: _age,rollNo: _rollNo,id: id);
-    updateStudent(_student);
-  }
+class _UpdateStudentState extends State<UpdateStudent> {
+  final _key = GlobalKey<FormState>();
+
+  bool read = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final controllerName = TextEditingController(text: widget.name);
+    final controllerAddress = TextEditingController(text: widget.address);
+    final controllerRollNo = TextEditingController(text: widget.rollNo);
+    final controllerAge = TextEditingController(text: widget.age);
+
+    Future<void> onUpdateStudentClick() async {
+      final _name = controllerName.text;
+      final _rollNo = controllerRollNo.text;
+      final _age = controllerAge.text;
+      final _address = controllerAddress.text;
+      final _student = Student(
+          address: _address,
+          name: _name,
+          age: _age,
+          rollNo: _rollNo,
+          id: widget.id);
+      updateStudent(_student);
+    }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Edit Student",
-          style: appBarStyle,
-        ),
+        title: read == true
+            ? Text(
+                "Student Details",
+                style: appBarStyle,
+              )
+            : Text(
+                "Edit",
+                style: appBarStyle,
+              ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
+              const CircleAvatar(
+                child: Icon(
+                  Icons.person,
+                  size: 50,
+                ),
+                radius: 50,
+              ),
+              SizedBox(
+                height: 30,
+              ),
               Form(
                 key: _key,
                 child: Column(
                   children: [
                     BoxInputField(
+                      readOnly: read,
                       line: 1,
                       controller: controllerRollNo,
                       placeholder: const Text('Roll No.'),
@@ -69,6 +97,7 @@ class UpdateStudent extends StatelessWidget {
                       height: 10,
                     ),
                     BoxInputField(
+                      readOnly: read,
                       line: 1,
                       controller: controllerName,
                       placeholder: const Text('Student Name'),
@@ -82,6 +111,7 @@ class UpdateStudent extends StatelessWidget {
                       height: 10,
                     ),
                     BoxInputField(
+                      readOnly: read,
                       line: 1,
                       controller: controllerAge,
                       placeholder: const Text('Age'),
@@ -95,6 +125,7 @@ class UpdateStudent extends StatelessWidget {
                       height: 10,
                     ),
                     BoxInputField(
+                      readOnly: read,
                       line: 4,
                       controller: controllerAddress,
                       placeholder: const Text('Address'),
@@ -105,21 +136,47 @@ class UpdateStudent extends StatelessWidget {
                       },
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
-                    BoxButton(
-                      title: 'Add',
-                      color: Colors.green,
-                      onTap: () async {
-                        if (_key.currentState!.validate()) {
-                          onUpdateStudentClick();
-                          Navigator.pop(context);
-                          // getAllStudents();
-                          print('added');
-                        } else {
-                          print('not');
-                        }
-                      },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        read == true
+                            ? BoxButton(
+                                leading: const Icon(Icons.edit),
+                                title: 'edit',
+                                color: Colors.green,
+                                onTap: () {
+                                  setState(() {
+                                    read = !read;
+                                  });
+                                },
+                              )
+                            : BoxButton(
+                                leading: const Icon(Icons.upgrade),
+                                title: 'Update',
+                                color: Colors.green,
+                                onTap: () async {
+                                  if (_key.currentState!.validate()) {
+                                    onUpdateStudentClick();
+                                    Navigator.pop(context);
+                                    // getAllStudents();
+                                    print('added');
+                                  } else {
+                                    print('not');
+                                  }
+                                },
+                              ),
+                        BoxButton(
+                          leading: const Icon(Icons.delete),
+                          title: 'Delete',
+                          color: Colors.red,
+                          onTap: () {
+                            deleteStudent(widget.id);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -130,6 +187,4 @@ class UpdateStudent extends StatelessWidget {
       ),
     );
   }
-
-  
 }
