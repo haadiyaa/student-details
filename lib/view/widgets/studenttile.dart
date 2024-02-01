@@ -14,12 +14,20 @@ class StudentTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      
       onTap: () {
         print('ljhgfdsa');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => UpdateStudent(id: data.id, rollNo: data.rollNo, name: data.name, age: data.age, address: data.address)),
+          MaterialPageRoute(
+            builder: (_) => UpdateStudent(
+              image: data.photoName!,
+              id: data.id,
+              rollNo: data.rollNo,
+              name: data.name,
+              age: data.age,
+              address: data.address,
+            ),
+          ),
         );
       },
       child: Padding(
@@ -51,10 +59,18 @@ class StudentTile extends StatelessWidget {
                 ),
               ],
             ),
-            const CircleAvatar(
-              child: Icon(Icons.person,size: 30,),
-              radius: 30,
-            ),
+            data.photoName == null
+                ? const CircleAvatar(
+                    radius: 30,
+                    child: Icon(
+                      Icons.person,
+                      size: 30,
+                    ),
+                  )
+                : CircleAvatar(
+                    radius: 30,
+                    backgroundImage: MemoryImage(data.photoName!),
+                  ),
           ],
         ),
       ),

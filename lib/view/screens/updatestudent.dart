@@ -1,9 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:student_login_project/Model/model.dart';
 import 'package:student_login_project/controller/student_db.dart';
 import 'package:student_login_project/view/widgets/boxbuttorn.dart';
 import 'package:student_login_project/view/widgets/boxinputfield.dart';
 import 'package:student_login_project/view/widgets/mystyles.dart';
+import 'package:student_login_project/view/widgets/utils.dart';
 
 class UpdateStudent extends StatefulWidget {
   int? id;
@@ -11,6 +15,7 @@ class UpdateStudent extends StatefulWidget {
   final String name;
   final String age;
   final String address;
+  Uint8List image;
 
   UpdateStudent({
     required this.id,
@@ -19,16 +24,28 @@ class UpdateStudent extends StatefulWidget {
     required this.name,
     required this.age,
     required this.address,
+    required this.image,
   });
 
   @override
-  State<UpdateStudent> createState() => _UpdateStudentState();
+  State<UpdateStudent> createState() => UpdateStudentState(image);
 }
 
-class _UpdateStudentState extends State<UpdateStudent> {
+class UpdateStudentState extends State<UpdateStudent> {
   final _key = GlobalKey<FormState>();
-
   bool read = true;
+  late Uint8List _image;
+  UpdateStudentState(Uint8List image) {
+    this._image = image;
+  }
+  
+  void selectImage() async{
+    Uint8List img = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = img;
+    });
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +60,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
       final _age = controllerAge.text;
       final _address = controllerAddress.text;
       final _student = Student(
+          photoName: _image,
           address: _address,
           name: _name,
           age: _age,
@@ -68,14 +86,32 @@ class _UpdateStudentState extends State<UpdateStudent> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const CircleAvatar(
-                child: Icon(
-                  Icons.person,
-                  size: 50,
-                ),
-                radius: 50,
-              ),
-              SizedBox(
+              read == true
+                  ? Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage: MemoryImage(_image),
+                        ),
+                      ],
+                    )
+                  : Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage: MemoryImage(_image),
+                        ),
+                        Positioned(
+                          bottom: -10,
+                          right: -10,
+                          child: IconButton(
+                            onPressed: selectImage,
+                            icon: const Icon(Icons.add_a_photo),
+                          ),
+                        ),
+                      ],
+                    ),
+              const SizedBox(
                 height: 30,
               ),
               Form(
@@ -187,4 +223,6 @@ class _UpdateStudentState extends State<UpdateStudent> {
       ),
     );
   }
+
+  
 }

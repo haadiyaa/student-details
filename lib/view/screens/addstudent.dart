@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -10,14 +11,13 @@ import 'package:student_login_project/view/widgets/mystyles.dart';
 import 'package:student_login_project/view/widgets/utils.dart';
 
 class AddStudent extends StatefulWidget {
-
   AddStudent({super.key});
 
   @override
-  State<AddStudent> createState() => _AddStudentState();
+  State<AddStudent> createState() => AddStudentState();
 }
 
-class _AddStudentState extends State<AddStudent> {
+class AddStudentState extends State<AddStudent> {
   final _controllerName = TextEditingController();
 
   final _controllerAddress = TextEditingController();
@@ -33,9 +33,8 @@ class _AddStudentState extends State<AddStudent> {
   void selectImage() async {
     Uint8List img = await pickImage(ImageSource.gallery);
     setState(() {
-      _image=img;
+      _image = img;
     });
-    
   }
 
   @override
@@ -58,18 +57,18 @@ class _AddStudentState extends State<AddStudent> {
                   children: [
                     Stack(
                       children: [
-                        _image!=null?
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundImage: MemoryImage(_image!),
-                        ):
-                        const CircleAvatar(
-                          radius: 50,
-                          child: Icon(
-                            Icons.person,
-                            size: 50,
-                          ),
-                        ),
+                        _image != null
+                            ? CircleAvatar(
+                                radius: 50,
+                                backgroundImage: MemoryImage(_image!),
+                              )
+                            : const CircleAvatar(
+                                radius: 50,
+                                child: Icon(
+                                  Icons.person,
+                                  size: 50,
+                                ),
+                              ),
                         Positioned(
                           bottom: -10,
                           right: -10,
@@ -80,7 +79,7 @@ class _AddStudentState extends State<AddStudent> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     BoxInputField(
@@ -169,8 +168,13 @@ class _AddStudentState extends State<AddStudent> {
     final _age = _controllerAge.text;
     final _address = _controllerAddress.text;
 
-    final _student =
-        Student(rollNo: _rollNo, address: _address, age: _age, name: _name);
+    final _student = Student(
+      rollNo: _rollNo,
+      address: _address,
+      age: _age,
+      name: _name,
+      photoName:_image!,
+    );
 
     addStudent(_student);
   }

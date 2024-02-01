@@ -18,7 +18,12 @@ Future<Database> get database async {
 Future<Database> initDB(String s) async {
   final dbpath = await getDatabasesPath();
   final String path = join(s);
-  return await openDatabase(path, version: 1, onCreate: createDB);
+  return await openDatabase(
+    path,
+    version: 2,
+    onCreate: createDB,
+    onUpgrade: _onUpgrade,
+  );
 }
 
 Future<void> createDB(Database db, int version) async {
@@ -26,13 +31,20 @@ Future<void> createDB(Database db, int version) async {
     CREATE TABLE StudentTable (id INTEGER PRIMARY KEY,rollno TEXT NOT NULL,name TEXT NOT NULL,address TEXT NOT NULL,age TEXT NOT NULL)
     ''');
 }
+
+FutureOr<void> _onUpgrade(Database db, int oldVersion, int newVersion) {
+  if(oldVersion<newVersion){
+    db.execute('ALTER TABLE StudentTable ADD COLUMN photoName TEXT');
+  }
+}
 //--------------/////////////////////////////-------------------------------------------------
 
 Future<void> addStudent(Student value) async {
   final db = await database;
+  // db.insert('StudentTable',value.toMap());
   await db.rawInsert(
-      'INSERT INTO StudentTable (rollno, name,address,age) values(?,?,?,?)',
-      [value.rollNo, value.name, value.address, value.age]);
+      'INSERT INTO StudentTable (rollno, name,address,age,photoName) values(?,?,?,?,?)',
+      [value.rollNo, value.name, value.address, value.age, value.photoName]);
   getAllStudents();
   print('added');
 }
@@ -54,19 +66,20 @@ Future<void> deleteStudent(int? id) async {
   getAllStudents();
 }
 
-// Future<void> updateStudent(int? id,String rollNo, String name,String age,String address ) async{
-//   final db=await database;
-//   await _database!.rawUpdate('UPDATE StudentTable SET rollno=?,name=?,age=?,address=? WHERE id=?',[rollNo,name,age,address,id]);
-//   print('updated');
-//   getAllStudents();
-// }
-
-Future<void> updateStudent(Student toUpdate) async{
-  final db=await database;
-   await db.update('StudentTable',toUpdate.toMap(),where: 'id=?',whereArgs: [toUpdate.id],conflictAlgorithm: ConflictAlgorithm.replace);
+Future<void> updateStudent(Student toUpdate) async {
+  final db = await database;
+  await db.update('StudentTable', toUpdate.toMap(),
+      where: 'id=?',
+      whereArgs: [toUpdate.id],
+      conflictAlgorithm: ConflictAlgorithm.replace);
   print('updated');
   getAllStudents();
   studentListNotifier.notifyListeners();
 }
 
-
+Future<void> getPhoto(int id)async{
+  final db = await database;
+  final img= await db.rawQuery('SELECT photoName FROM StudentTable WHERE id=?',[id]);
+  print(img);
+  print('got image');
+}
